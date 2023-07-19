@@ -3,10 +3,11 @@ import { ref, reactive, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import MessageItem from '@/components/MessageItem.vue'
 import useMessagesStore from '@/store/messages'
+import useContactsStore from '@/store/contacts'
 
 const route = useRoute()
 const messagesStore = useMessagesStore()
-
+const contactsStore = useContactsStore()
 const end = ref(null)
 const channelId = ref(null)
 const title = ref('')
@@ -14,7 +15,7 @@ const people = reactive([
 ])
 
 const messagesView = computed(() => messagesStore.findMessagesByChannelId(channelId.value).map((message) => {
-  const author = people.find((p) => p.id === message.author)
+  const author = contactsStore.getContactById(message.author)
   if (!author) return message;
     return {
     ...message,
